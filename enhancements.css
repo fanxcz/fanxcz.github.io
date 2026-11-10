@@ -1,0 +1,991 @@
+/* =========================================================
+   ПОЛИТ-КОМПАС — RESPONSIVE DESIGN v5
+   Без фреймворков и внешних библиотек
+   ========================================================= */
+
+:root{
+  --bg:#f4f4f4;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#d1d5db;
+  --accent:#374151;
+  --radius:6px;
+  --max:1100px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  width:100%;
+  min-width:0;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* =========================================================
+   ОСНОВНОЙ КОНТЕЙНЕР
+   ========================================================= */
+
+main{
+  width:100% !important;
+  max-width:var(--max) !important;
+  margin:0 auto !important;
+  padding:24px !important;
+
+  display:block !important;
+  position:relative;
+}
+
+/* Если старый CSS превращал main в grid */
+main,
+main > *,
+main section,
+main article{
+  min-width:0;
+}
+
+/* =========================================================
+   НАВИГАЦИЯ
+   ========================================================= */
+
+.pc-nav{
+  width:100%;
+  display:flex !important;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+
+  margin:0 0 24px !important;
+  padding:4px;
+
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+.pc-nav a{
+  flex:1 1 0;
+  display:block;
+
+  padding:10px 14px;
+
+  color:var(--muted);
+  background:transparent;
+
+  border:0;
+  border-radius:4px;
+
+  text-align:center;
+  text-decoration:none;
+  font-size:14px;
+
+  transition:
+    background .15s ease,
+    color .15s ease;
+}
+
+.pc-nav a:hover{
+  background:#f3f4f6;
+  color:var(--text);
+}
+
+.pc-nav a:active{
+  background:#e5e7eb;
+}
+
+/* =========================================================
+   КАРТОЧКИ
+   ========================================================= */
+
+.pc-card{
+  width:100% !important;
+  max-width:100% !important;
+
+  display:block !important;
+
+  margin:0 0 18px !important;
+  padding:22px !important;
+
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+
+  overflow:hidden;
+}
+
+.pc-title{
+  margin:0 0 8px;
+
+  color:var(--text);
+  font-size:22px;
+  line-height:1.25;
+  font-weight:600;
+}
+
+.pc-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+
+/* =========================================================
+   РЕЗУЛЬТАТ
+   ========================================================= */
+
+.pc-result{
+  text-align:center;
+}
+
+.pc-result .pc-title{
+  font-size:24px;
+}
+
+.pc-coords{
+  width:100%;
+
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+
+  gap:12px;
+  margin:20px 0;
+}
+
+.pc-coordinate{
+  width:100%;
+  padding:16px;
+
+  background:#fafafa;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+
+  text-align:center;
+}
+
+.pc-coordinate span{
+  display:block;
+
+  color:var(--muted);
+  font-size:13px;
+}
+
+.pc-coordinate strong{
+  display:block;
+
+  margin-top:5px;
+
+  color:var(--text);
+  font-size:30px;
+  line-height:1.1;
+}
+
+/* =========================================================
+   ГРАФИК
+   ========================================================= */
+
+.pc-chart{
+  display:block;
+
+  width:100% !important;
+  max-width:680px !important;
+  height:auto !important;
+
+  margin:20px auto !important;
+
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+/* =========================================================
+   КНОПКИ
+   ========================================================= */
+
+.pc-actions{
+  width:100%;
+
+  display:flex !important;
+  flex-wrap:wrap;
+  justify-content:center;
+
+  gap:8px;
+  margin-top:16px;
+}
+
+.pc-btn{
+  min-height:42px;
+
+  padding:10px 16px;
+
+  color:var(--text);
+  background:#fff;
+
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    transform .05s ease;
+}
+
+.pc-btn:hover{
+  border-color:var(--accent);
+}
+
+.pc-btn:active{
+  transform:translateY(1px);
+}
+
+.pc-btn-primary{
+  color:#fff;
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.pc-btn-primary:hover{
+  background:#1f2937;
+  border-color:#1f2937;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.pc-grid{
+  width:100%;
+
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+
+  gap:16px;
+}
+
+.pc-grid label{
+  display:block;
+
+  color:var(--text);
+  font-size:14px;
+}
+
+.pc-input{
+  display:block;
+
+  width:100%;
+  min-width:0;
+
+  margin-top:7px;
+  padding:11px 12px;
+
+  color:var(--text);
+  background:#fff;
+
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+
+  outline:none;
+}
+
+.pc-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(55,65,81,.08);
+}
+
+.pc-notice{
+  width:100%;
+
+  margin:14px 0;
+  padding:12px 14px;
+
+  color:var(--muted);
+  background:#fafafa;
+
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* =========================================================
+   ИСТОРИЯ
+   ========================================================= */
+
+.pc-history-item{
+  width:100%;
+
+  display:flex !important;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:12px;
+
+  padding:13px 0;
+
+  border-bottom:1px solid var(--border);
+}
+
+.pc-history-item:last-of-type{
+  border-bottom:0;
+}
+
+/* =========================================================
+   СТАТИСТИКА
+   ========================================================= */
+
+.pc-stat{
+  min-width:0;
+
+  padding:18px;
+
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+.pc-stat-number{
+  margin-top:6px;
+
+  color:var(--text);
+  font-size:28px;
+  font-weight:600;
+}
+
+/* =========================================================
+   ПОЛИТИЧЕСКИЕ ФИГУРЫ
+   ========================================================= */
+
+#figures{
+  width:100% !important;
+  max-width:100% !important;
+
+  display:block !important;
+
+  margin-top:18px;
+}
+
+#figures > *{
+  max-width:100%;
+  min-width:0;
+}
+
+#figures .card,
+#figures .figure,
+#figures article{
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+}
+
+/* =========================================================
+   СТАРЫЕ GRID/FLEX-РАЗВАЛЫ
+   ========================================================= */
+
+/*
+ * Иногда старый index.html задаёт grid напрямую.
+ * Эти правила намеренно имеют повышенную специфичность.
+ */
+
+main > .pc-card,
+main > section,
+main > article,
+main > div{
+  width:100%;
+  max-width:100%;
+}
+
+/* =========================================================
+   DARK MODE — если старый сайт его использует
+   ========================================================= */
+
+body.dark{
+  --bg:#111827;
+  --card:#1f2937;
+  --text:#f9fafb;
+  --muted:#9ca3af;
+  --border:#374151;
+  --accent:#d1d5db;
+}
+
+body.dark .pc-nav,
+body.dark .pc-btn,
+body.dark .pc-input,
+body.dark .pc-coordinate,
+body.dark .pc-stat,
+body.dark .pc-notice,
+body.dark .pc-chart{
+  background:#1f2937;
+}
+
+body.dark .pc-btn-primary{
+  color:#111827;
+  background:#f3f4f6;
+}
+
+/* =========================================================
+   ПЛАНШЕТ
+   ========================================================= */
+
+@media(max-width:900px){
+
+  main{
+    max-width:760px !important;
+    padding:20px !important;
+  }
+
+}
+
+/* =========================================================
+   ТЕЛЕФОН
+   ========================================================= */
+
+@media(max-width:700px){
+
+  html,
+  body{
+    width:100%;
+    overflow-x:hidden;
+  }
+
+  main{
+    width:100% !important;
+    max-width:100% !important;
+
+    margin:0 !important;
+
+    padding:
+      12px
+      12px
+      calc(12px + env(safe-area-inset-bottom))
+      12px !important;
+  }
+
+  /* Навигация */
+  .pc-nav{
+    width:100% !important;
+
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+
+    gap:3px;
+
+    margin-bottom:14px !important;
+  }
+
+  .pc-nav a{
+    min-width:0;
+
+    padding:9px 4px;
+
+    font-size:12px;
+    white-space:nowrap;
+  }
+
+  /* Все карточки — одна колонка */
+  .pc-card{
+    width:100% !important;
+    max-width:100% !important;
+
+    margin-bottom:12px !important;
+
+    padding:16px !important;
+  }
+
+  .pc-title{
+    font-size:20px;
+  }
+
+  .pc-result .pc-title{
+    font-size:21px;
+  }
+
+  /* Координаты */
+  .pc-coords{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px;
+  }
+
+  .pc-coordinate{
+    padding:13px 8px;
+  }
+
+  .pc-coordinate strong{
+    font-size:25px;
+  }
+
+  /* Все формы — одна колонка */
+  .pc-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:10px;
+  }
+
+  /* Кнопки — красивые, без вылезания */
+  .pc-actions{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    width:100%;
+  }
+
+  .pc-actions .pc-btn{
+    width:100%;
+    min-width:0;
+    padding:10px 8px;
+    font-size:13px;
+  }
+
+  .pc-actions .pc-btn-primary{
+    grid-column:auto;
+  }
+
+  /* График */
+  .pc-chart{
+    width:100% !important;
+    max-width:100% !important;
+
+    margin:14px auto !important;
+  }
+
+  /* История */
+  .pc-history-item{
+    font-size:13px;
+  }
+
+  /* Статистика */
+  .pc-stat-number{
+    font-size:25px;
+  }
+
+}
+
+/* =========================================================
+   ОЧЕНЬ МАЛЕНЬКИЕ ТЕЛЕФОНЫ
+   ========================================================= */
+
+@media(max-width:380px){
+
+  main{
+    padding:8px !important;
+  }
+
+  .pc-card{
+    padding:13px !important;
+  }
+
+  .pc-nav a{
+    font-size:11px;
+    padding:8px 2px;
+  }
+
+  .pc-actions{
+    grid-template-columns:1fr !important;
+  }
+
+  .pc-actions .pc-btn{
+    min-height:40px;
+  }
+
+  .pc-coordinate strong{
+    font-size:23px;
+  }
+}
+
+/* =========================================================
+   TOUCH
+   ========================================================= */
+
+@media(pointer:coarse){
+
+  .pc-btn,
+  .pc-nav a{
+    min-height:42px;
+  }
+
+  .pc-input{
+    min-height:44px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+/* =========================================================
+   ПЕЧАТЬ
+   ========================================================= */
+
+@media print{
+
+  body{
+    background:#fff;
+  }
+
+  .pc-nav,
+  .pc-actions{
+    display:none !important;
+  }
+
+  .pc-card{
+    border:1px solid #999;
+    break-inside:avoid;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE LAYOUT FIX
+   Убираем старую desktop/grid-разметку
+   ========================================================= */
+
+@media screen and (max-width:700px){
+
+  html,
+  body{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow-x:hidden !important;
+  }
+
+  body{
+    display:block !important;
+    position:relative !important;
+  }
+
+  /*
+   * Старые контейнеры сайта.
+   * На мобильном они больше не должны создавать колонки.
+   */
+  main,
+  #app,
+  #root,
+  .app,
+  .container,
+  .wrapper,
+  .page,
+  .content,
+  .main,
+  .layout{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+
+    display:block !important;
+
+    grid-template-columns:none !important;
+    grid-template-areas:none !important;
+
+    position:static !important;
+
+    margin-left:0 !important;
+    margin-right:0 !important;
+
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  /*
+   * Все наши основные секции находятся строго
+   * одна под другой.
+   */
+  #pcEnhancedResult,
+  #pcCompare,
+  #pcHistory,
+  #figures{
+    position:static !important;
+
+    display:block !important;
+
+    float:none !important;
+
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+
+    left:auto !important;
+    right:auto !important;
+    top:auto !important;
+    bottom:auto !important;
+
+    transform:none !important;
+
+    grid-area:auto !important;
+
+    margin-left:0 !important;
+    margin-right:0 !important;
+
+    clear:both !important;
+  }
+
+  /*
+   * Запрещаем старые правила размещать
+   * карточки в 3 отдельные колонки.
+   */
+  #pcEnhancedResult,
+  #pcCompare,
+  #pcHistory{
+    order:initial !important;
+  }
+
+  /*
+   * Карточки
+   */
+  .pc-card{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+
+    margin-top:0 !important;
+    margin-bottom:12px !important;
+
+    padding:15px !important;
+
+    overflow:hidden !important;
+  }
+
+  /*
+   * Результат
+   */
+  #pcEnhancedResult{
+    text-align:center !important;
+  }
+
+  /*
+   * Навигация
+   */
+  .pc-nav{
+    width:100% !important;
+
+    display:grid !important;
+
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+
+    margin:0 0 12px !important;
+
+    padding:3px !important;
+  }
+
+  .pc-nav a{
+    width:100% !important;
+    min-width:0 !important;
+
+    padding:9px 3px !important;
+
+    font-size:12px !important;
+
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  /*
+   * Координаты
+   */
+  .pc-coords{
+    width:100% !important;
+
+    display:grid !important;
+
+    grid-template-columns:1fr 1fr !important;
+
+    gap:8px !important;
+  }
+
+  .pc-coordinate{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  /*
+   * График никогда не должен вылезать
+   */
+  .pc-chart,
+  canvas{
+    display:block !important;
+
+    width:100% !important;
+    max-width:100% !important;
+    height:auto !important;
+
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+  /*
+   * Формы
+   */
+  .pc-grid{
+    width:100% !important;
+
+    display:grid !important;
+
+    grid-template-columns:1fr !important;
+
+    gap:10px !important;
+  }
+
+  .pc-input,
+  input[type="number"]{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+
+  /*
+   * Кнопки
+   */
+  .pc-actions{
+    width:100% !important;
+
+    display:grid !important;
+
+    grid-template-columns:1fr 1fr !important;
+
+    gap:7px !important;
+  }
+
+  .pc-actions button,
+  .pc-btn{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+
+    min-height:42px !important;
+
+    margin:0 !important;
+  }
+
+  /*
+   * Список фигур
+   */
+  #figures{
+    width:100% !important;
+
+    display:block !important;
+
+    overflow:visible !important;
+  }
+
+  #figures > div,
+  #figures > article,
+  #figures .card,
+  #figures .figure{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+
+    margin-left:0 !important;
+    margin-right:0 !important;
+
+    box-sizing:border-box !important;
+  }
+
+  /*
+   * История
+   */
+  #pcHistory{
+    width:100% !important;
+  }
+
+  .pc-history-item{
+    width:100% !important;
+
+    display:flex !important;
+
+    justify-content:space-between !important;
+
+    align-items:center !important;
+
+    gap:8px !important;
+  }
+
+  /*
+   * Полностью отключаем возможные старые
+   * абсолютные/фиксированные позиции.
+   */
+  main *{
+    max-width:100%;
+  }
+
+  #pcEnhancedResult *,
+  #pcCompare *,
+  #pcHistory *,
+  #figures *{
+    position:static !important;
+    float:none !important;
+  }
+
+}
+
+/* =========================================================
+   PHONE 360px
+   ========================================================= */
+
+@media screen and (max-width:380px){
+
+  main,
+  #app,
+  #root,
+  .app,
+  .container,
+  .wrapper,
+  .page,
+  .content,
+  .main,
+  .layout{
+    padding-left:7px !important;
+    padding-right:7px !important;
+  }
+
+  .pc-card{
+    padding:12px !important;
+  }
+
+  .pc-nav a{
+    font-size:11px !important;
+  }
+
+  .pc-actions{
+    grid-template-columns:1fr !important;
+  }
+
+  .pc-coordinate strong{
+    font-size:23px !important;
+  }
+}

@@ -1,0 +1,2215 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Полит-Компас — политические координаты</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+ --bg:#f3f4f6;
+ --card:#fff;
+ --text:#111827;
+ --muted:#6b7280;
+ --border:#d1d5db;
+ --soft:#e5e7eb;
+ --shadow:0 10px 35px rgba(0,0,0,.07);
+ --danger:#991b1b;
+}
+
+body.dark{
+ --bg:#0d1117;
+ --card:#161b22;
+ --text:#f3f4f6;
+ --muted:#9ca3af;
+ --border:#30363d;
+ --soft:#21262d;
+ --shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+ min-height:100vh;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ line-height:1.45;
+}
+
+button,input{font:inherit}
+
+button{cursor:pointer}
+
+header{
+ position:sticky;
+ top:0;
+ z-index:100;
+ background:rgba(255,255,255,.94);
+ border-bottom:1px solid var(--border);
+ backdrop-filter:blur(12px);
+}
+
+body.dark header{background:rgba(22,27,34,.94)}
+
+.nav{
+ width:min(1120px,calc(100% - 28px));
+ height:64px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:20px;
+}
+
+.logo{
+ font-weight:850;
+ letter-spacing:-.7px;
+ cursor:pointer;
+ white-space:nowrap;
+}
+
+.logo span{
+ color:var(--muted);
+ font-weight:500;
+}
+
+nav{
+ display:flex;
+ gap:4px;
+}
+
+.nav button,.theme{
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ padding:9px 12px;
+ border-radius:8px;
+}
+
+.nav button:hover,.theme:hover{
+ background:var(--bg);
+ color:var(--text);
+}
+
+.nav button.active{
+ background:var(--text);
+ color:var(--card);
+}
+
+main{
+ width:min(1120px,calc(100% - 28px));
+ margin:auto;
+ padding:40px 0 90px;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.hero{
+ text-align:center;
+ padding:55px 15px 45px;
+}
+
+.hero h1{
+ font-size:clamp(40px,8vw,76px);
+ line-height:1;
+ letter-spacing:-4px;
+ margin-bottom:22px;
+}
+
+.hero p{
+ max-width:700px;
+ margin:0 auto 30px;
+ color:var(--muted);
+ font-size:18px;
+ line-height:1.65;
+}
+
+.primary{
+ border:0;
+ background:var(--text);
+ color:var(--card);
+ padding:14px 25px;
+ border-radius:10px;
+ font-weight:750;
+}
+
+.primary:hover{opacity:.88}
+
+.secondary{
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ padding:12px 18px;
+ border-radius:9px;
+}
+
+.secondary:hover{border-color:var(--text)}
+
+.info-grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:14px;
+}
+
+.info-card,.card{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:15px;
+ box-shadow:var(--shadow);
+}
+
+.info-card{padding:22px}
+
+.info-card b{
+ display:block;
+ margin-bottom:7px;
+}
+
+.info-card p{
+ color:var(--muted);
+ font-size:14px;
+ line-height:1.55;
+}
+
+.card{padding:26px}
+
+.section-title{
+ font-size:32px;
+ line-height:1.15;
+ letter-spacing:-1px;
+ margin-bottom:7px;
+}
+
+.section-subtitle{
+ color:var(--muted);
+ margin-bottom:25px;
+}
+
+.test-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ margin-bottom:15px;
+ color:var(--muted);
+ font-size:14px;
+}
+
+.progress-bg{
+ height:7px;
+ background:var(--soft);
+ border-radius:99px;
+ overflow:hidden;
+}
+
+.progress{
+ height:100%;
+ width:0;
+ background:var(--text);
+ transition:width .25s;
+}
+
+.question-number{
+ color:var(--muted);
+ margin-top:26px;
+ font-size:13px;
+ font-weight:700;
+ letter-spacing:.6px;
+}
+
+.question{
+ margin:9px 0 25px;
+ font-size:clamp(23px,4vw,34px);
+ line-height:1.25;
+ letter-spacing:-.8px;
+}
+
+.answers{
+ display:grid;
+ gap:9px;
+}
+
+.answer{
+ width:100%;
+ border:1px solid var(--border);
+ background:var(--card);
+ color:var(--text);
+ padding:15px 17px;
+ text-align:left;
+ border-radius:10px;
+ transition:.15s;
+}
+
+.answer:hover{
+ border-color:var(--text);
+ transform:translateY(-1px);
+}
+
+.answer.selected{
+ background:var(--text);
+ color:var(--card);
+ border-color:var(--text);
+}
+
+.answer.skip{color:var(--muted)}
+
+.test-actions{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ margin-top:22px;
+}
+
+.result-header{text-align:center}
+
+.result-header h2{
+ font-size:clamp(28px,5vw,42px);
+ letter-spacing:-1.3px;
+}
+
+.result-header p{
+ color:var(--muted);
+ margin-top:6px;
+}
+
+.coords{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:10px;
+ margin:20px 0 25px;
+}
+
+.coord{
+ background:var(--bg);
+ border:1px solid var(--border);
+ padding:9px 15px;
+ border-radius:9px;
+}
+
+.coord b{margin-left:5px}
+
+.map-wrap{
+ width:min(900px,100%);
+ margin:auto;
+}
+
+.map-frame{
+ position:relative;
+ padding:48px 55px 58px;
+}
+
+.map{
+ position:relative;
+ width:100%;
+ aspect-ratio:1/1;
+ border:2px solid #111827;
+ overflow:hidden;
+ user-select:none;
+ touch-action:none;
+ cursor:crosshair;
+ box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.map.darkmap{
+ border-color:#fff;
+}
+
+.zone{
+ position:absolute;
+ border:1px solid rgba(255,255,255,.3);
+}
+
+.q1{left:0;top:0;width:25%;height:25%;background:#b91c1c}
+.q2{left:25%;top:0;width:25%;height:25%;background:#92400e}
+.q3{left:50%;top:0;width:25%;height:25%;background:#166534}
+.q4{left:75%;top:0;width:25%;height:25%;background:#1e3a8a}
+
+.q5{left:0;top:25%;width:25%;height:25%;background:#dc2626}
+.q6{left:25%;top:25%;width:25%;height:25%;background:#b45309}
+.q7{left:50%;top:25%;width:25%;height:25%;background:#15803d}
+.q8{left:75%;top:25%;width:25%;height:25%;background:#2563eb}
+
+.q9{left:0;top:50%;width:25%;height:25%;background:#ef4444}
+.q10{left:25%;top:50%;width:25%;height:25%;background:#d97706}
+.q11{left:50%;top:50%;width:25%;height:25%;background:#22c55e}
+.q12{left:75%;top:50%;width:25%;height:25%;background:#3b82f6}
+
+.q13{left:0;top:75%;width:25%;height:25%;background:#991b1b}
+.q14{left:25%;top:75%;width:25%;height:25%;background:#c2410c}
+.q15{left:50%;top:75%;width:25%;height:25%;background:#65a30d}
+.q16{left:75%;top:75%;width:25%;height:25%;background:#eab308}
+
+.grid{
+ position:absolute;
+ inset:0;
+ background:
+ linear-gradient(to right,
+ transparent 24.7%,rgba(255,255,255,.4) 25%,transparent 25.3%,
+ transparent 49.7%,rgba(255,255,255,.75) 50%,transparent 50.3%,
+ transparent 74.7%,rgba(255,255,255,.4) 75%,transparent 75.3%),
+ linear-gradient(to bottom,
+ transparent 24.7%,rgba(255,255,255,.4) 25%,transparent 25.3%,
+ transparent 49.7%,rgba(255,255,255,.75) 50%,transparent 50.3%,
+ transparent 74.7%,rgba(255,255,255,.4) 75%,transparent 75.3%);
+ pointer-events:none;
+}
+
+.axis-x,.axis-y{
+ position:absolute;
+ background:#111827;
+ z-index:20;
+ pointer-events:none;
+}
+
+.axis-x{
+ left:0;
+ right:0;
+ top:50%;
+ height:3px;
+}
+
+.axis-y{
+ top:0;
+ bottom:0;
+ left:50%;
+ width:3px;
+}
+
+body.dark .axis-x,
+body.dark .axis-y{
+ background:#fff;
+}
+
+.axis-x:before,
+.axis-x:after,
+.axis-y:before,
+.axis-y:after{
+ position:absolute;
+ font-weight:900;
+ color:#111827;
+ white-space:nowrap;
+ font-size:13px;
+}
+
+body.dark .axis-x:before,
+body.dark .axis-x:after,
+body.dark .axis-y:before,
+body.dark .axis-y:after{
+ color:#fff;
+}
+
+.axis-x:before{
+ content:"ЛЕВЫЕ";
+ right:calc(100% + 12px);
+ top:-11px;
+}
+
+.axis-x:after{
+ content:"ПРАВЫЕ";
+ left:calc(100% + 12px);
+ top:-11px;
+}
+
+.axis-y:before{
+ content:"АВТОРИТАРНЫЕ";
+ bottom:calc(100% + 12px);
+ left:50%;
+ transform:translateX(-50%);
+}
+
+.axis-y:after{
+ content:"ЛИБЕРТАРНЫЕ";
+ top:calc(100% + 12px);
+ left:50%;
+ transform:translateX(-50%);
+}
+
+.zone-label{
+ position:absolute;
+ z-index:8;
+ width:25%;
+ text-align:center;
+ color:#fff;
+ font-size:clamp(8px,1.4vw,16px);
+ line-height:1.05;
+ font-weight:850;
+ text-shadow:0 2px 4px rgba(0,0,0,.8);
+ pointer-events:auto;
+ cursor:pointer;
+ padding:7px;
+}
+
+.l1{left:0;top:8%}
+.l2{left:25%;top:8%}
+.l3{left:50%;top:8%}
+.l4{left:75%;top:8%}
+
+.l5{left:0;top:33%}
+.l6{left:25%;top:33%}
+.l7{left:50%;top:33%}
+.l8{left:75%;top:33%}
+
+.l9{left:0;top:58%}
+.l10{left:25%;top:58%}
+.l11{left:50%;top:58%}
+.l12{left:75%;top:58%}
+
+.l13{left:0;top:83%}
+.l14{left:25%;top:83%}
+.l15{left:50%;top:83%}
+.l16{left:75%;top:83%}
+
+.result-point,
+.compare-point{
+ position:absolute;
+ z-index:50;
+ width:27px;
+ height:27px;
+ border-radius:50%;
+ background:#fff;
+ border:5px solid #111827;
+ box-shadow:
+ 0 0 0 4px rgba(255,255,255,.9),
+ 0 4px 15px rgba(0,0,0,.6);
+ transform:translate(-50%,50%);
+ pointer-events:none;
+}
+
+.result-point:after{
+ content:"ВЫ";
+ position:absolute;
+ top:-34px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#111827;
+ color:#fff;
+ padding:4px 7px;
+ border-radius:5px;
+ font-size:10px;
+ font-weight:900;
+}
+
+.compare-point.a{
+ background:#fff;
+ border-color:#111827;
+}
+
+.compare-point.b{
+ background:#111827;
+ border-color:#fff;
+}
+
+.map-help{
+ text-align:center;
+ color:var(--muted);
+ font-size:12px;
+ margin-top:10px;
+}
+
+.scale{
+ display:flex;
+ justify-content:space-between;
+ color:var(--muted);
+ font-size:12px;
+ margin-top:8px;
+}
+
+.map-info{
+ margin:22px auto 0;
+ padding:16px;
+ max-width:700px;
+ text-align:center;
+ background:var(--bg);
+ border:1px solid var(--border);
+ border-radius:10px;
+}
+
+.map-info b{
+ display:block;
+ margin-bottom:5px;
+}
+
+.map-info span{
+ color:var(--muted);
+ font-size:14px;
+}
+
+.result-actions{
+ display:flex;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:20px;
+}
+
+.category-list{
+ display:grid;
+ gap:12px;
+}
+
+.category{
+ border:1px solid var(--border);
+ border-radius:10px;
+ padding:16px;
+ background:var(--card);
+}
+
+.category-head{
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ margin-bottom:8px;
+}
+
+.category-head span{color:var(--muted)}
+
+.bar{
+ position:relative;
+ height:9px;
+ background:var(--soft);
+ border-radius:99px;
+ overflow:hidden;
+}
+
+.bar-fill{
+ height:100%;
+ background:var(--text);
+ border-radius:99px;
+}
+
+.compare-map{
+ margin-top:25px;
+}
+
+.compare-controls{
+ display:flex;
+ flex-wrap:wrap;
+ gap:10px;
+ margin-top:20px;
+}
+
+.compare-result{
+ margin-top:20px;
+ padding:16px;
+ border:1px solid var(--border);
+ border-radius:10px;
+ background:var(--bg);
+}
+
+.history-item{
+ border:1px solid var(--border);
+ padding:16px;
+ border-radius:10px;
+ margin-bottom:10px;
+ background:var(--card);
+}
+
+.history-item .date{
+ color:var(--muted);
+ font-size:12px;
+ margin-bottom:6px;
+}
+
+.history-item b{font-size:18px}
+
+.method{
+ color:var(--muted);
+ line-height:1.7;
+}
+
+.method h3{
+ color:var(--text);
+ margin:25px 0 8px;
+}
+
+.method ul{
+ padding-left:23px;
+}
+
+footer{
+ border-top:1px solid var(--border);
+ text-align:center;
+ color:var(--muted);
+ font-size:13px;
+ padding:25px 15px 45px;
+}
+
+footer a{color:var(--text)}
+
+.mobile-nav{display:none}
+
+.modal{
+ position:fixed;
+ inset:0;
+ z-index:200;
+ background:rgba(0,0,0,.55);
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+ width:min(520px,100%);
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:23px;
+ box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-box h3{margin-bottom:8px}
+
+.modal-box p{
+ color:var(--muted);
+ line-height:1.6;
+}
+
+.modal-close{
+ float:right;
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ font-size:24px;
+}
+
+@media(max-width:760px){
+
+ header{position:static}
+
+ .nav{
+  height:58px;
+ }
+
+ nav{display:none}
+
+ main{
+  width:calc(100% - 18px);
+  padding:18px 0 90px;
+ }
+
+ .hero{
+  padding:38px 8px 28px;
+ }
+
+ .hero h1{
+  font-size:45px;
+  letter-spacing:-2.5px;
+ }
+
+ .hero p{
+  font-size:15px;
+ }
+
+ .info-grid{
+  grid-template-columns:1fr;
+ }
+
+ .card{padding:17px}
+
+ .question{font-size:23px}
+
+ .map-frame{
+  padding:46px 31px 52px;
+ }
+
+ .axis-x:before,
+ .axis-x:after{
+  font-size:8px;
+ }
+
+ .axis-y:before,
+ .axis-y:after{
+  font-size:8px;
+ }
+
+ .zone-label{
+  font-size:7px;
+  padding:3px;
+ }
+
+ .result-point,
+ .compare-point{
+  width:19px;
+  height:19px;
+  border-width:4px;
+ }
+
+ .result-point:after{
+  top:-26px;
+  font-size:8px;
+ }
+
+ .mobile-nav{
+  display:flex;
+  position:fixed;
+  z-index:150;
+  left:8px;
+  right:8px;
+  bottom:8px;
+  height:59px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
+  justify-content:space-around;
+  align-items:center;
+ }
+
+ .mobile-nav button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:10px;
+ }
+
+ .mobile-nav button.active{
+  color:var(--text);
+  font-weight:850;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+
+<div class="logo" onclick="showPage('home')">
+ Полит-Компас <span>/ координаты</span>
+</div>
+
+<nav>
+<button data-page="home" class="active" onclick="showPage('home')">Главная</button>
+<button data-page="test" onclick="startTest()">Тест</button>
+<button data-page="result" onclick="showPage('result')">Результат</button>
+<button data-page="compare" onclick="showPage('compare')">Сравнить</button>
+<button data-page="history" onclick="showPage('history');renderHistory()">История</button>
+<button data-page="method" onclick="showPage('method')">Методика</button>
+</nav>
+
+<button class="theme" onclick="toggleTheme()">◐</button>
+
+</div>
+</header>
+
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+<div class="hero">
+
+<h1>Полит-Компас</h1>
+
+<p>
+60 вопросов → две координаты → интерактивная политическая карта.
+Получите результат в виде точки на двумерной системе координат.
+</p>
+
+<button class="primary" onclick="startTest()">
+Пройти тест
+</button>
+
+</div>
+
+<div class="info-grid">
+
+<div class="info-card">
+<b>Экономическая ось</b>
+<p>
+От большей ориентации модели на рыночную свободу
+до большей роли государственного регулирования.
+</p>
+</div>
+
+<div class="info-card">
+<b>Социальная ось</b>
+<p>
+От большей индивидуальной свободы
+до большей роли государственного контроля.
+</p>
+</div>
+
+<div class="info-card">
+<b>Интерактивная карта</b>
+<p>
+После теста точку можно двигать по карте и смотреть,
+как изменяются координаты.
+</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TEST -->
+<section id="test" class="page">
+
+<div class="card">
+
+<div class="test-head">
+<span id="counter">Вопрос 1 из 60</span>
+<span id="category">Экономика</span>
+</div>
+
+<div class="progress-bg">
+<div id="progress" class="progress"></div>
+</div>
+
+<div class="question-number" id="qnum"></div>
+<div class="question" id="qtext"></div>
+
+<div id="answers" class="answers"></div>
+
+<div class="test-actions">
+<button class="secondary" onclick="previousQuestion()">Назад</button>
+<button class="secondary" onclick="restartTest()">Заново</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- RESULT -->
+<section id="result" class="page">
+
+<div class="card">
+
+<div class="result-header">
+<h2 id="resultTitle">Ваши координаты</h2>
+<p id="resultSub"></p>
+</div>
+
+<div class="coords">
+<div class="coord">
+Экономика <b id="ecoValue">0.0</b>
+</div>
+<div class="coord">
+Общество <b id="socValue">0.0</b>
+</div>
+</div>
+
+
+<div class="map-wrap">
+
+<div class="map-frame">
+
+<div class="map" id="mainMap">
+
+<div class="zone q1"></div>
+<div class="zone q2"></div>
+<div class="zone q3"></div>
+<div class="zone q4"></div>
+<div class="zone q5"></div>
+<div class="zone q6"></div>
+<div class="zone q7"></div>
+<div class="zone q8"></div>
+<div class="zone q9"></div>
+<div class="zone q10"></div>
+<div class="zone q11"></div>
+<div class="zone q12"></div>
+<div class="zone q13"></div>
+<div class="zone q14"></div>
+<div class="zone q15"></div>
+<div class="zone q16"></div>
+
+<div class="zone-label l1" onclick="zoneInfo(1)">ЛЕВЫЕ<br>АВТОРИТАРНЫЕ</div>
+<div class="zone-label l2" onclick="zoneInfo(2)">ГОСУДАРСТВО<br>И ЭКОНОМИКА</div>
+<div class="zone-label l3" onclick="zoneInfo(3)">ПОРЯДОК<br>И РЕГУЛИРОВАНИЕ</div>
+<div class="zone-label l4" onclick="zoneInfo(4)">ПРАВЫЕ<br>АВТОРИТАРНЫЕ</div>
+
+<div class="zone-label l5" onclick="zoneInfo(5)">СОЦИАЛЬНЫЙ<br>КОНТРОЛЬ</div>
+<div class="zone-label l6" onclick="zoneInfo(6)">ЭТАТИСТСКИЕ<br>ПОЗИЦИИ</div>
+<div class="zone-label l7" onclick="zoneInfo(7)">ПОРЯДОК<br>И РЫНОК</div>
+<div class="zone-label l8" onclick="zoneInfo(8)">РЫНОЧНАЯ<br>СВОБОДА</div>
+
+<div class="zone-label l9" onclick="zoneInfo(9)">СОЦИАЛЬНАЯ<br>ОРИЕНТАЦИЯ</div>
+<div class="zone-label l10" onclick="zoneInfo(10)">СВОБОДЫ<br>И СОЛИДАРНОСТЬ</div>
+<div class="zone-label l11" onclick="zoneInfo(11)">РЫНОК<br>И СВОБОДЫ</div>
+<div class="zone-label l12" onclick="zoneInfo(12)">ИНДИВИДУАЛЬНАЯ<br>АВТОНОМИЯ</div>
+
+<div class="zone-label l13" onclick="zoneInfo(13)">ЛИБЕРТАРНЫЕ<br>ЛЕВЫЕ</div>
+<div class="zone-label l14" onclick="zoneInfo(14)">ЛИЧНАЯ<br>СВОБОДА</div>
+<div class="zone-label l15" onclick="zoneInfo(15)">РЫНОК<br>И АВТОНОМИЯ</div>
+<div class="zone-label l16" onclick="zoneInfo(16)">ЛИБЕРТАРНЫЕ<br>ПРАВЫЕ</div>
+
+<div class="grid"></div>
+<div class="axis-x"></div>
+<div class="axis-y"></div>
+
+<div id="resultPoint" class="result-point"></div>
+
+</div>
+
+<div class="scale">
+<span>−10</span>
+<span>−5</span>
+<span>0</span>
+<span>+5</span>
+<span>+10</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="map-help">
+Нажмите или перетащите точку — координаты можно исследовать вручную.
+</div>
+
+<div class="map-info">
+<b id="zoneName">Центральная зона</b>
+<span id="zoneDescription"></span>
+</div>
+
+<div class="result-actions">
+<button class="primary" onclick="startTest()">Пройти снова</button>
+<button class="secondary" onclick="shareResult()">Поделиться</button>
+<button class="secondary" onclick="downloadPNG()">PNG</button>
+<button class="secondary" onclick="showPage('compare')">Сравнить</button>
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:15px">
+
+<h2 class="section-title">Показатели по категориям</h2>
+<p class="section-subtitle">
+Отдельные результаты по группам вопросов.
+</p>
+
+<div id="categories" class="category-list"></div>
+
+</div>
+
+</section>
+
+
+<!-- COMPARE -->
+<section id="compare" class="page">
+
+<div class="card">
+
+<h2 class="section-title">Сравнение результатов</h2>
+
+<p class="section-subtitle">
+На карте отображаются две точки. Выберите результат из истории.
+</p>
+
+<div class="compare-controls">
+<button class="secondary" onclick="loadCompareFromHistory()">Выбрать из истории</button>
+<button class="secondary" onclick="useCurrentForA()">Текущий → A</button>
+<button class="secondary" onclick="useCurrentForB()">Текущий → B</button>
+</div>
+
+<div class="map-wrap compare-map">
+
+<div class="map-frame">
+
+<div class="map">
+
+<div class="zone q1"></div>
+<div class="zone q2"></div>
+<div class="zone q3"></div>
+<div class="zone q4"></div>
+<div class="zone q5"></div>
+<div class="zone q6"></div>
+<div class="zone q7"></div>
+<div class="zone q8"></div>
+<div class="zone q9"></div>
+<div class="zone q10"></div>
+<div class="zone q11"></div>
+<div class="zone q12"></div>
+<div class="zone q13"></div>
+<div class="zone q14"></div>
+<div class="zone q15"></div>
+<div class="zone q16"></div>
+
+<div class="grid"></div>
+<div class="axis-x"></div>
+<div class="axis-y"></div>
+
+<div id="pointA" class="compare-point a"></div>
+<div id="pointB" class="compare-point b"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="compareText" class="compare-result">
+Выберите два результата для сравнения.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HISTORY -->
+<section id="history" class="page">
+
+<div class="card">
+
+<h2 class="section-title">История</h2>
+
+<p class="section-subtitle">
+Результаты хранятся локально в браузере.
+</p>
+
+<div id="historyList"></div>
+
+</div>
+
+</section>
+
+
+<!-- METHOD -->
+<section id="method" class="page">
+
+<div class="card method">
+
+<h2 class="section-title">Методика</h2>
+
+<p>
+Полит-Компас представляет результат как две числовые координаты.
+Это математическая модель визуализации ответов, а не официальная
+классификация политических взглядов.
+</p>
+
+<h3>Экономическая координата</h3>
+
+<p>
+Левая часть горизонтальной оси соответствует отрицательным значениям,
+правая — положительным. В данной версии отрицательная сторона
+представляет большую ориентацию модели на рыночную свободу,
+положительная — большую роль государственного регулирования.
+</p>
+
+<h3>Социальная координата</h3>
+
+<p>
+Верх карты соответствует положительным значениям, низ — отрицательным.
+В данной версии верхняя сторона соответствует большей роли
+государственного контроля, нижняя — большей индивидуальной свободе.
+</p>
+
+<h3>Шкала ответов</h3>
+
+<ul>
+<li>Полностью согласен — +2</li>
+<li>Скорее согласен — +1</li>
+<li>Нейтрально — 0</li>
+<li>Скорее не согласен — −1</li>
+<li>Полностью не согласен — −2</li>
+<li>Не уверен / пропустить — не учитывается</li>
+</ul>
+
+<h3>Нормализация</h3>
+
+<p>
+Каждая ось нормализуется в диапазон от −10 до +10.
+Пропущенные вопросы не считаются нейтральными ответами.
+</p>
+
+<h3>Категории</h3>
+
+<p>
+Вопросы разделены на тематические группы. Они нужны для того,
+чтобы после теста можно было посмотреть не только две основные
+координаты, но и распределение результата по темам.
+</p>
+
+<h3>О зонах карты</h3>
+
+<p>
+Цветные области являются частью интерфейсной модели сайта.
+Их названия описывают положение на координатной плоскости и не
+должны рассматриваться как объективная оценка человека.
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<div class="mobile-nav">
+<button data-page="home" onclick="showPage('home')">Главная</button>
+<button data-page="test" onclick="startTest()">Тест</button>
+<button data-page="result" onclick="showPage('result')">Результат</button>
+<button data-page="compare" onclick="showPage('compare')">Сравнить</button>
+<button data-page="history" onclick="showPage('history');renderHistory()">История</button>
+</div>
+
+
+<footer>
+<div>Полит-Компас</div>
+<div style="margin-top:6px">
+<a href="mailto:fanxcz579@gmail.com">fanxcz579@gmail.com</a>
+ · Telegram @fanxcz
+</div>
+</footer>
+
+
+<div id="modal" class="modal" onclick="closeModal(event)">
+<div class="modal-box">
+<button class="modal-close" onclick="closeModal()">×</button>
+<h3 id="modalTitle"></h3>
+<p id="modalText"></p>
+</div>
+</div>
+
+
+<script>
+"use strict";
+
+
+/* =========================================================
+   ВОПРОСЫ
+========================================================= */
+
+const questions=[
+
+["Государство должно активно регулировать экономику.","Экономика",1,0],
+["Высокие доходы должны облагаться более высокой ставкой налога.","Экономика",1,0],
+["Частный бизнес должен иметь широкую свободу ценообразования.","Экономика",-1,0],
+["Государству следует поддерживать стратегические отрасли.","Экономика",1,0],
+["Социальные программы должны финансироваться даже при росте расходов бюджета.","Экономика",1,0],
+["Конкуренция обычно эффективнее государственного управления предприятиями.","Экономика",-1,0],
+["Минимальная заработная плата должна устанавливаться законом.","Экономика",1,0],
+["Государственные предприятия должны конкурировать с частными на равных условиях.","Экономика",-1,0],
+["Рынок труда должен быть максимально гибким.","Экономика",-1,0],
+["Государство должно ограничивать монополии.","Экономика",1,0],
+["Налоговая система должна сильнее перераспределять доходы.","Экономика",1,0],
+["Государственная помощь должна быть адресной, когда это возможно.","Экономика",-1,0],
+
+["Право на мирные публичные собрания должно широко защищаться.","Свободы",0,-1],
+["Государство может ограничивать некоторые высказывания ради общественной безопасности.","Свободы",0,1],
+["Личная жизнь граждан должна быть защищена от необоснованного государственного контроля.","Свободы",0,-1],
+["Законы должны одинаково применяться к гражданам независимо от их статуса.","Свободы",0,-1],
+["Образование должно развивать свободу выбора учебной траектории.","Свободы",0,-1],
+["Государство должно устанавливать единые обязательные нормы поведения там, где это необходимо.","Свободы",0,1],
+["Мирные протесты не должны автоматически рассматриваться как угроза безопасности.","Свободы",0,-1],
+["Свобода слова должна защищаться даже при резкой критике властей.","Свободы",0,-1],
+["Государство должно иметь широкие полномочия во время чрезвычайных ситуаций.","Свободы",0,1],
+["Судебная система должна быть институционально независима от исполнительной власти.","Свободы",0,-1],
+["Местные органы власти должны самостоятельно решать больше вопросов.","Свободы",0,-1],
+["Государственный бюджет должен быть максимально прозрачен для граждан.","Свободы",0,-1],
+
+["Граждане должны иметь удобный доступ к государственным данным.","Государство",0,-1],
+["Силовые органы должны получать дополнительные полномочия для предотвращения тяжёлых преступлений.","Государство",0,1],
+["Решения властей должны регулярно проходить общественный и парламентский контроль.","Государство",0,-1],
+["Военные решения должны находиться под гражданским и парламентским контролем.","Государство",0,-1],
+["Законы о чрезвычайном положении должны иметь чёткий срок действия.","Государство",0,-1],
+["Государственные закупки должны проводиться по прозрачным и проверяемым правилам.","Государство",0,-1],
+["Цифровые сервисы государства должны по возможности быть открытыми и проверяемыми.","Государство",0,-1],
+["Искусственный интеллект в государственном секторе должен проходить независимую проверку.","Государство",0,-1],
+["Персональные данные должны собираться только в объёме, необходимом для конкретной цели.","Государство",0,-1],
+["Платформы должны объяснять основные правила модерации пользователям.","Государство",0,-1],
+["Государство должно поддерживать развитие открытых технологий и стандартов.","Государство",0,-1],
+["Критически важная цифровая инфраструктура требует специальных мер защиты.","Государство",0,1],
+
+["Алгоритмические решения, влияющие на права граждан, должны быть проверяемыми.","Технологии",0,-1],
+["Доступ к интернету следует рассматривать как важную часть современной инфраструктуры.","Технологии",0,-1],
+
+["Экологические нормы должны учитывать долгосрочный ущерб окружающей среде.","Экология",1,0],
+["Загрязнители должны нести большую часть затрат на устранение экологического ущерба.","Экология",1,0],
+["Переход к чистой энергетике должен поддерживаться государственными инвестициями.","Экология",1,0],
+["Экологические требования к промышленности не должны отменяться ради краткосрочной выгоды.","Экология",1,0],
+["Города должны расширять общественный транспорт даже при значительных затратах.","Экология",1,0],
+["Природные территории должны получать усиленную правовую защиту.","Экология",1,0],
+["Экологическая политика должна учитывать влияние на стоимость жизни домохозяйств.","Экология",-1,0],
+["Страны должны координировать меры против трансграничного загрязнения.","Мир",0,-1],
+
+["Международные договоры должны иметь предсказуемые процедуры исполнения.","Мир",0,-1],
+["Торговые ограничения могут применяться как инструмент внешней политики.","Мир",0,1],
+["Государствам следует сохранять возможность самостоятельно определять внутреннюю политику.","Мир",0,1],
+["Международные организации должны получать полномочия только в чётко определённых областях.","Мир",0,1],
+["Гуманитарная помощь должна предоставляться независимо от политических разногласий.","Мир",0,-1],
+["Экономические связи между странами могут снижать риск конфликтов.","Мир",0,-1],
+["Страны должны использовать дипломатические механизмы до применения силы.","Мир",0,-1],
+["Во внешней торговле государство может защищать отрасли с высокой стратегической значимостью.","Мир",0,1],
+
+["Научные решения государственной политики должны опираться на открытые данные.","Наука",0,-1],
+["Экологические риски должны учитываться при градостроительном планировании.","Наука",1,0],
+["Крупные инфраструктурные проекты должны публиковать основные финансовые расчёты.","Наука",0,-1],
+["Право на доступ к базовым государственным услугам должно быть понятным и недискриминационным.","Наука",0,-1],
+["Государственные программы поддержки должны регулярно оцениваться по открытым критериям.","Наука",1,0],
+["Защита критической инфраструктуры может требовать дополнительных государственных мер.","Наука",0,1]
+
+];
+
+
+const answers=[
+["Полностью согласен",2],
+["Скорее согласен",1],
+["Нейтрально",0],
+["Скорее не согласен",-1],
+["Полностью не согласен",-2],
+["Не уверен / пропустить",null]
+];
+
+
+let current=0;
+let selections=new Array(questions.length).fill(null);
+let lastResult=null;
+let compareA=null;
+let compareB=null;
+
+
+/* =========================================================
+   НАВИГАЦИЯ
+========================================================= */
+
+function showPage(id){
+
+ document.querySelectorAll(".page").forEach(p=>{
+  p.classList.toggle("active",p.id===id);
+ });
+
+ document.querySelectorAll("[data-page]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===id);
+ });
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+
+function startTest(){
+
+ current=0;
+ selections=new Array(questions.length).fill(null);
+
+ showPage("test");
+ renderQuestion();
+}
+
+
+function restartTest(){
+ startTest();
+}
+
+
+/* =========================================================
+   ТЕСТ
+========================================================= */
+
+function renderQuestion(){
+
+ const q=questions[current];
+
+ document.getElementById("counter").textContent=
+  "Вопрос "+(current+1)+" из "+questions.length;
+
+ document.getElementById("category").textContent=q[1];
+
+ document.getElementById("qnum").textContent=
+  "ВОПРОС "+String(current+1).padStart(2,"0");
+
+ document.getElementById("qtext").textContent=q[0];
+
+ document.getElementById("progress").style.width=
+  (((current+1)/questions.length)*100)+"%";
+
+ const box=document.getElementById("answers");
+ box.innerHTML="";
+
+ answers.forEach(a=>{
+
+  const btn=document.createElement("button");
+
+  btn.className="answer";
+
+  if(a[1]===null) btn.classList.add("skip");
+
+  if(selections[current]===a[1]){
+   btn.classList.add("selected");
+  }
+
+  btn.textContent=a[0];
+
+  btn.onclick=()=>{
+
+   selections[current]=a[1];
+
+   if(current<questions.length-1){
+    current++;
+    renderQuestion();
+   }else{
+    finishTest();
+   }
+
+  };
+
+  box.appendChild(btn);
+
+ });
+
+}
+
+
+function previousQuestion(){
+
+ if(current>0){
+  current--;
+  renderQuestion();
+ }
+
+}
+
+
+/* =========================================================
+   РАСЧЁТ
+========================================================= */
+
+function calculate(){
+
+ let ecoSum=0;
+ let socSum=0;
+ let ecoMax=0;
+ let socMax=0;
+
+ const categories={};
+
+ questions.forEach((q,i)=>{
+
+  const value=selections[i];
+
+  if(value===null)return;
+
+  const e=q[2];
+  const s=q[3];
+
+  if(e!==0){
+   ecoSum+=value*e;
+   ecoMax+=2*Math.abs(e);
+  }
+
+  if(s!==0){
+   socSum+=value*s;
+   socMax+=2*Math.abs(s);
+  }
+
+  if(!categories[q[1]]){
+   categories[q[1]]={sum:0,max:0};
+  }
+
+  categories[q[1]].sum+=value*(e+s);
+  categories[q[1]].max+=2*(Math.abs(e)+Math.abs(s));
+
+ });
+
+ let eco=ecoMax?(ecoSum/ecoMax)*10:0;
+ let soc=socMax?(socSum/socMax)*10:0;
+
+ eco=clamp(eco,-10,10);
+ soc=clamp(soc,-10,10);
+
+ return{
+  eco,
+  soc,
+  categories,
+  answered:selections.filter(v=>v!==null).length,
+  timestamp:Date.now(),
+  date:new Date().toLocaleString("ru-RU")
+ };
+
+}
+
+
+function clamp(v,min,max){
+ return Math.max(min,Math.min(max,v));
+}
+
+
+/* =========================================================
+   РЕЗУЛЬТАТ
+========================================================= */
+
+function finishTest(){
+
+ lastResult=calculate();
+
+ localStorage.setItem(
+  "politLastResult",
+  JSON.stringify(lastResult)
+ );
+
+ const history=getHistory();
+
+ history.unshift(lastResult);
+
+ localStorage.setItem(
+  "politHistory",
+  JSON.stringify(history.slice(0,30))
+ );
+
+ renderResult();
+
+ showPage("result");
+}
+
+
+function renderResult(){
+
+ if(!lastResult){
+
+  const saved=localStorage.getItem("politLastResult");
+
+  if(saved){
+   try{
+    lastResult=JSON.parse(saved);
+   }catch(e){}
+  }
+
+ }
+
+ if(!lastResult)return;
+
+ document.getElementById("ecoValue").textContent=
+  score(lastResult.eco);
+
+ document.getElementById("socValue").textContent=
+  score(lastResult.soc);
+
+ document.getElementById("resultSub").textContent=
+  "Отвечено "+lastResult.answered+
+  " из "+questions.length+
+  " вопросов";
+
+ const name=getZone(lastResult.eco,lastResult.soc);
+
+ document.getElementById("resultTitle").textContent=name;
+
+ updatePoint(
+  document.getElementById("resultPoint"),
+  lastResult.eco,
+  lastResult.soc
+ );
+
+ updateZoneInfo(lastResult.eco,lastResult.soc);
+
+ renderCategories();
+
+}
+
+
+function score(v){
+ return (v>0?"+":"")+Number(v).toFixed(1);
+}
+
+
+function getZone(eco,soc){
+
+ if(Math.abs(eco)<2 && Math.abs(soc)<2)
+  return "Центральная область";
+
+ const h=eco<-3
+  ?"левая экономическая область"
+  :eco>3
+   ?"правая экономическая область"
+   :"центральная экономическая область";
+
+ const v=soc>3
+  ?"авторитарная часть карты"
+  :soc<-3
+   ?"либертарианская часть карты"
+   :"центральная социальная область";
+
+ return h+" · "+v;
+}
+
+
+function updateZoneInfo(eco,soc){
+
+ let h;
+ let v;
+
+ if(eco<-3)
+  h="больше рыночной свободы";
+ else if(eco>3)
+  h="больше государственного регулирования";
+ else
+  h="около центра экономической оси";
+
+ if(soc>3)
+  v="больше государственного контроля";
+ else if(soc<-3)
+  v="больше индивидуальной свободы";
+ else
+  v="около центра социальной оси";
+
+ document.getElementById("zoneName").textContent=
+  getZone(eco,soc);
+
+ document.getElementById("zoneDescription").textContent=
+  h+" · "+v+
+  ". Координаты: экономика "+
+  score(eco)+", общество "+score(soc)+".";
+}
+
+
+/* =========================================================
+   ТОЧКА
+========================================================= */
+
+function updatePoint(point,eco,soc){
+
+ const x=((eco+10)/20)*100;
+ const y=((soc+10)/20)*100;
+
+ point.style.left=x+"%";
+ point.style.bottom=y+"%";
+}
+
+
+/* =========================================================
+   ИНТЕРАКТИВНАЯ КАРТА
+========================================================= */
+
+const mainMap=document.getElementById("mainMap");
+const resultPoint=document.getElementById("resultPoint");
+
+let dragging=false;
+
+
+function mapCoordinates(event){
+
+ const rect=mainMap.getBoundingClientRect();
+
+ let x=(event.clientX-rect.left)/rect.width;
+ let y=(event.clientY-rect.top)/rect.height;
+
+ x=clamp(x,0,1);
+ y=clamp(y,0,1);
+
+ const eco=(x*20)-10;
+ const soc=((1-y)*20)-10;
+
+ return{
+  eco:clamp(eco,-10,10),
+  soc:clamp(soc,-10,10)
+ };
+
+}
+
+
+function movePoint(event){
+
+ if(!lastResult)return;
+
+ const p=mapCoordinates(event);
+
+ lastResult.eco=p.eco;
+ lastResult.soc=p.soc;
+
+ document.getElementById("ecoValue").textContent=score(p.eco);
+ document.getElementById("socValue").textContent=score(p.soc);
+
+ updatePoint(resultPoint,p.eco,p.soc);
+ updateZoneInfo(p.eco,p.soc);
+
+ localStorage.setItem(
+  "politLastResult",
+  JSON.stringify(lastResult)
+ );
+
+}
+
+
+mainMap.addEventListener("pointerdown",event=>{
+
+ if(event.target.classList.contains("zone-label"))return;
+
+ dragging=true;
+
+ mainMap.setPointerCapture(event.pointerId);
+
+ movePoint(event);
+
+});
+
+
+mainMap.addEventListener("pointermove",event=>{
+
+ if(dragging){
+  movePoint(event);
+ }
+
+});
+
+
+mainMap.addEventListener("pointerup",()=>{
+ dragging=false;
+});
+
+
+mainMap.addEventListener("pointercancel",()=>{
+ dragging=false;
+});
+
+
+/* =========================================================
+   КАТЕГОРИИ
+========================================================= */
+
+function renderCategories(){
+
+ const box=document.getElementById("categories");
+
+ box.innerHTML="";
+
+ if(!lastResult || !lastResult.categories)return;
+
+ Object.entries(lastResult.categories).forEach(([name,data])=>{
+
+  const value=data.max
+   ?(data.sum/data.max)*10
+   :0;
+
+  const percent=((value+10)/20)*100;
+
+  const item=document.createElement("div");
+
+  item.className="category";
+
+  item.innerHTML=`
+   <div class="category-head">
+    <b>${escapeHtml(name)}</b>
+    <span>${score(value)}</span>
+   </div>
+   <div class="bar">
+    <div class="bar-fill" style="width:${percent}%"></div>
+   </div>
+  `;
+
+  box.appendChild(item);
+
+ });
+
+}
+
+
+/* =========================================================
+   ИСТОРИЯ
+========================================================= */
+
+function getHistory(){
+
+ try{
+  return JSON.parse(
+   localStorage.getItem("politHistory")||"[]"
+  );
+ }catch(e){
+  return [];
+ }
+
+}
+
+
+function renderHistory(){
+
+ const box=document.getElementById("historyList");
+ const history=getHistory();
+
+ box.innerHTML="";
+
+ if(!history.length){
+
+  box.innerHTML=
+   '<div style="padding:35px;text-align:center;color:var(--muted)">История пуста.</div>';
+
+  return;
+ }
+
+ history.forEach((r,index)=>{
+
+  const item=document.createElement("div");
+
+  item.className="history-item";
+
+  item.innerHTML=`
+   <div class="date">${escapeHtml(r.date||"")}</div>
+   <b>Экономика ${score(r.eco)}</b>
+   <br>
+   <span style="color:var(--muted)">
+    Общество ${score(r.soc)}
+   </span>
+   <div style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap">
+    <button class="secondary" onclick="loadHistory(${index})">
+     Открыть
+    </button>
+    <button class="secondary" onclick="compareHistory(${index})">
+     В сравнение
+    </button>
+   </div>
+  `;
+
+  box.appendChild(item);
+
+ });
+
+}
+
+
+function loadHistory(index){
+
+ const history=getHistory();
+
+ if(!history[index])return;
+
+ lastResult=history[index];
+
+ localStorage.setItem(
+  "politLastResult",
+  JSON.stringify(lastResult)
+ );
+
+ renderResult();
+
+ showPage("result");
+}
+
+
+function compareHistory(index){
+
+ const history=getHistory();
+
+ if(!history[index])return;
+
+ if(!compareA){
+  compareA=history[index];
+ }else{
+  compareB=history[index];
+ }
+
+ renderCompare();
+
+ showPage("compare");
+}
+
+
+/* =========================================================
+   СРАВНЕНИЕ
+========================================================= */
+
+function useCurrentForA(){
+
+ if(!lastResult){
+  alert("Сначала получите результат.");
+  return;
+ }
+
+ compareA=lastResult;
+
+ renderCompare();
+}
+
+
+function useCurrentForB(){
+
+ if(!lastResult){
+  alert("Сначала получите результат.");
+  return;
+ }
+
+ compareB=lastResult;
+
+ renderCompare();
+}
+
+
+function loadCompareFromHistory(){
+
+ const history=getHistory();
+
+ if(history.length<2){
+  alert("Нужно минимум два результата в истории.");
+  return;
+ }
+
+ compareA=history[0];
+ compareB=history[1];
+
+ renderCompare();
+}
+
+
+function renderCompare(){
+
+ if(!compareA && !compareB)return;
+
+ if(compareA){
+  updatePoint(
+   document.getElementById("pointA"),
+   compareA.eco,
+   compareA.soc
+  );
+ }
+
+ if(compareB){
+  updatePoint(
+   document.getElementById("pointB"),
+   compareB.eco,
+   compareB.soc
+  );
+ }
+
+ const box=document.getElementById("compareText");
+
+ if(!compareA || !compareB){
+
+  box.textContent=
+   "Выберите ещё один результат. Сейчас выбран только один.";
+
+  return;
+ }
+
+ const de=Math.abs(compareA.eco-compareB.eco);
+ const ds=Math.abs(compareA.soc-compareB.soc);
+
+ const distance=Math.sqrt(
+  Math.pow(de,2)+Math.pow(ds,2)
+ );
+
+ box.innerHTML=`
+  <b>Результат A</b><br>
+  Экономика ${score(compareA.eco)} · Общество ${score(compareA.soc)}
+  <br><br>
+  <b>Результат B</b><br>
+  Экономика ${score(compareB.eco)} · Общество ${score(compareB.soc)}
+  <br><br>
+  Разница по экономической оси:
+  <b>${de.toFixed(1)}</b>
+  <br>
+  Разница по социальной оси:
+  <b>${ds.toFixed(1)}</b>
+  <br>
+  Геометрическое расстояние между точками:
+  <b>${distance.toFixed(1)}</b>
+ `;
+
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+function shareResult(){
+
+ if(!lastResult)return;
+
+ const url=
+  location.origin+
+  location.pathname+
+  "?e="+encodeURIComponent(lastResult.eco.toFixed(2))+
+  "&s="+encodeURIComponent(lastResult.soc.toFixed(2));
+
+ if(navigator.share){
+
+  navigator.share({
+   title:"Мои политические координаты",
+   text:
+    "Экономика "+score(lastResult.eco)+
+    " · Общество "+score(lastResult.soc),
+   url
+  }).catch(()=>{});
+
+ }else if(navigator.clipboard){
+
+  navigator.clipboard.writeText(url).then(()=>{
+   alert("Ссылка скопирована.");
+  });
+
+ }else{
+
+  prompt("Скопируйте ссылку:",url);
+
+ }
+
+}
+
+
+/* =========================================================
+   PNG
+========================================================= */
+
+function downloadPNG(){
+
+ if(!lastResult)return;
+
+ const canvas=document.createElement("canvas");
+
+ const size=1200;
+
+ canvas.width=size;
+ canvas.height=size;
+
+ const ctx=canvas.getContext("2d");
+
+ const zones=[
+  ["#b91c1c","#92400e","#166534","#1e3a8a"],
+  ["#dc2626","#b45309","#15803d","#2563eb"],
+  ["#ef4444","#d97706","#22c55e","#3b82f6"],
+  ["#991b1b","#c2410c","#65a30d","#eab308"]
+ ];
+
+ for(let row=0;row<4;row++){
+
+  for(let col=0;col<4;col++){
+
+   ctx.fillStyle=zones[row][col];
+
+   ctx.fillRect(
+    col*size/4,
+    row*size/4,
+    size/4,
+    size/4
+   );
+
+  }
+
+ }
+
+ ctx.strokeStyle="rgba(255,255,255,.5)";
+ ctx.lineWidth=4;
+
+ for(let i=1;i<4;i++){
+
+  ctx.beginPath();
+  ctx.moveTo(i*size/4,0);
+  ctx.lineTo(i*size/4,size);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(0,i*size/4);
+  ctx.lineTo(size,i*size/4);
+  ctx.stroke();
+
+ }
+
+ ctx.strokeStyle="#111827";
+ ctx.lineWidth=7;
+
+ ctx.beginPath();
+ ctx.moveTo(size/2,0);
+ ctx.lineTo(size/2,size);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(0,size/2);
+ ctx.lineTo(size,size/2);
+ ctx.stroke();
+
+ const x=((lastResult.eco+10)/20)*size;
+ const y=((10-lastResult.soc)/20)*size;
+
+ ctx.beginPath();
+ ctx.arc(x,y,25,0,Math.PI*2);
+
+ ctx.fillStyle="#fff";
+ ctx.fill();
+
+ ctx.strokeStyle="#111827";
+ ctx.lineWidth=10;
+ ctx.stroke();
+
+ ctx.fillStyle="#111827";
+ ctx.font="bold 38px Arial";
+ ctx.textAlign="center";
+
+ ctx.fillText("ВЫ",x,y-45);
+
+ ctx.font="bold 30px Arial";
+
+ ctx.fillText(
+  "Экономика "+score(lastResult.eco),
+  size/2,
+  size-55
+ );
+
+ ctx.fillText(
+  "Общество "+score(lastResult.soc),
+  size/2,
+  45
+ );
+
+ const a=document.createElement("a");
+
+ a.download="polit-compass-result.png";
+ a.href=canvas.toDataURL("image/png");
+ a.click();
+
+}
+
+
+/* =========================================================
+   ЗОНЫ
+========================================================= */
+
+const zoneTexts={
+
+1:["Левые авторитарные","Левая сторона экономической оси и верхняя сторона социальной оси."],
+2:["Государство и экономика","Экономическая часть карты с повышенной ролью регулирования и контролем."],
+3:["Порядок и регулирование","Верхняя центрально-правая область координатной модели."],
+4:["Правые авторитарные","Правая экономическая сторона и верхняя социальная сторона."],
+
+5:["Социальный контроль","Область с более высокой координатой социальной оси."],
+6:["Этатистские позиции","Область, где заметна роль государственного вмешательства."],
+7:["Порядок и рынок","Сочетание рыночной ориентации и повышенного социального контроля."],
+8:["Рыночная свобода","Правая экономическая часть карты с положительной социальной координатой."],
+
+9:["Социальная ориентация","Левая экономическая часть нижней половины карты."],
+10:["Свободы и солидарность","Область около нижней центральной части."],
+11:["Рынок и свободы","Правая экономическая и более свободная социальная область."],
+12:["Индивидуальная автономия","Правая нижняя часть координатной модели."],
+
+13:["Либертарные левые","Левая нижняя часть карты."],
+14:["Личная свобода","Нижняя центрально-левая область."],
+15:["Рынок и автономия","Нижняя центрально-правая область."],
+16:["Либертарные правые","Правая нижняя часть карты."]
+
+};
+
+
+function zoneInfo(id){
+
+ const z=zoneTexts[id];
+
+ if(!z)return;
+
+ document.getElementById("modalTitle").textContent=z[0];
+ document.getElementById("modalText").textContent=z[1];
+
+ document.getElementById("modal").classList.add("show");
+}
+
+
+function closeModal(event){
+
+ if(event && event.target!==document.getElementById("modal"))return;
+
+ document.getElementById("modal").classList.remove("show");
+}
+
+
+/* =========================================================
+   ТЕМА
+========================================================= */
+
+function toggleTheme(){
+
+ document.body.classList.toggle("dark");
+
+ localStorage.setItem(
+  "politTheme",
+  document.body.classList.contains("dark")
+   ?"dark"
+   :"light"
+ );
+
+}
+
+
+if(localStorage.getItem("politTheme")==="dark"){
+ document.body.classList.add("dark");
+}
+
+
+/* =========================================================
+   SHARED URL
+========================================================= */
+
+function loadURLResult(){
+
+ const p=new URLSearchParams(location.search);
+
+ if(!p.has("e") || !p.has("s"))return;
+
+ const eco=parseFloat(p.get("e"));
+ const soc=parseFloat(p.get("s"));
+
+ if(!Number.isFinite(eco)||!Number.isFinite(soc))return;
+
+ lastResult={
+  eco:clamp(eco,-10,10),
+  soc:clamp(soc,-10,10),
+  categories:{},
+  answered:0,
+  date:"Результат по ссылке",
+  timestamp:Date.now()
+ };
+
+ renderResult();
+ showPage("result");
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+ return String(value)
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+loadURLResult();
+
+if(!lastResult){
+
+ const saved=localStorage.getItem("politLastResult");
+
+ if(saved){
+
+  try{
+   lastResult=JSON.parse(saved);
+  }catch(e){}
+
+ }
+
+}
+
+if(lastResult){
+ renderResult();
+}
+
+console.log(
+ "Полит-Компас v2:",
+ questions.length,
+ "вопросов"
+);
+
+</script>
+
+</body>
+</html>

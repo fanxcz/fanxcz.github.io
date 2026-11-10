@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Статистика — Полит-Компас</title>
+<link rel="stylesheet" href="/enhancements.css?v=4">
+<link rel="icon" href="/favicon.svg">
+</head>
+<body>
+<main style="max-width:900px;margin:auto;padding:20px">
+
+<nav class="pc-nav">
+<a href="/">Тест</a>
+<a href="/methodology.html">Методология</a>
+<a href="/stats.html">Статистика</a>
+<a href="/about.html">О сайте</a>
+</nav>
+
+<section class="pc-card">
+<h1>Статистика</h1>
+
+<div class="pc-grid">
+<div class="pc-stat">
+<div>Всего прохождений</div>
+<div id="total" class="pc-stat-number">—</div>
+</div>
+
+<div class="pc-stat">
+<div>Средний Economic</div>
+<div id="avgEco" class="pc-stat-number">—</div>
+</div>
+
+<div class="pc-stat">
+<div>Средний Social</div>
+<div id="avgSoc" class="pc-stat-number">—</div>
+</div>
+</div>
+
+<div id="status" class="pc-notice">
+Загрузка…
+</div>
+</section>
+
+</main>
+
+<script>
+(async function(){
+  try{
+    const r=await fetch("/data/stats.json",{cache:"no-store"});
+    const d=await r.json();
+
+    if(d.total!==undefined)
+      document.getElementById("total").textContent=d.total;
+
+    if(d.avg_eco!==undefined)
+      document.getElementById("avgEco").textContent=
+        Number(d.avg_eco).toFixed(2);
+
+    if(d.avg_soc!==undefined)
+      document.getElementById("avgSoc").textContent=
+        Number(d.avg_soc).toFixed(2);
+
+    document.getElementById("status").textContent=
+      "Статистика загружена.";
+  }catch(e){
+    document.getElementById("status").textContent=
+      "Статистика пока недоступна.";
+  }
+})();
+</script>
+
+</body>
+</html>

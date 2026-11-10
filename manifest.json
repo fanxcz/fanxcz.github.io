@@ -1,0 +1,9 @@
+{
+  "name":"Полит-Компас",
+  "short_name":"Полит-Компас",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#f4f4f4",
+  "theme_color":"#374151",
+  "lang":"ru"
+}
